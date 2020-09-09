@@ -11,6 +11,9 @@ auth.set_access_token("1246318841963204608-vio3R1OMUccO1P90yoWqgK38u7ScnR",
 
 api = tweepy.API(auth)
 
+# 30 or so of these tweets will take place before the turn of the hour
+n_tweets = 30 + 100
+
 try:
     api.verify_credentials()
 except:
@@ -38,23 +41,44 @@ def construct_tweet(n):
         tweet = "It's " + \
                 random.choice(adj_options) + " " + \
                 random.choice(noun_options) + " " + \
-                random.choice(verb_options) + " " + \
-                "#PurdueRobotClub #purduedayofgiving (" + str(n) + "/50)"
+                random.choice(verb_options) + ", " + \
+                " which make robots like me!\n" + \
+                "#PurdueRobotClub #PurdueDayOfGiving (" + \
+                str(n) + "/" + str(n_tweets) + ")"
         
         if len(tweet) < 250:
            break 
 
-    print(tweet)
+    # print(tweet)
     return tweet
-    
 
-n_tweets = 0
+def get_wait_time():
+    t = time.localtime()
+    return (((5+16) - t.tm_hour) * 36000 +
+            (59 - t.tm_min) * 60 +
+            52 - t.tm_sec)
+
+def spam(n_tweets=10):
+    for i in range(n_tweets):
+        tweet = construct_tweet(i+1)
+        api.update_status(tweet)
+
+
 while True:
-    n_tweets += 1
-    tweet = construct_tweet(n_tweets)
-    api.update_status(tweet)
-    if (n_tweets == 50):
+    if  get_wait_time() > 30:
+        print("sleeping for " + str(get_wait_time()) + " seconds")
+        time.sleep(get_wait_time()-30)
+    elif get_wait_time() > 0:
+        time.sleep(1)
+        print("sleeping for 1 second")
+    else:
+        print("time to make some money")
+        start_time = time.time()
+        spam(n_tweets)
+        duration = time.time() - start_time
         break
-    time.sleep(1)
 
-api.update_status("PDOG interaction bot has finished, if you enjoyed make sure you donate! @PurdueRobotClub #purduedayofgiving#")
+time.sleep(1)
+api.update_status("PDOG interaction bot has finished at " + time.strftime("%H:%M:%S") + \
+    "\nif you enjoyed make sure you donate! @PurdueRobotClub #PurdueDayOfGiving")
+print("sent " + str(n_tweets) + " tweets in " + str(duration) + " seconds")
