@@ -1,0 +1,12 @@
+day
+time
+hour
+second
+decade
+opportunity
+moment
+instant
+minute
+chance
+occasion
+chance
