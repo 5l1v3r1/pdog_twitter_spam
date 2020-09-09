@@ -3,11 +3,11 @@ import random
 import time
 import sys
 
-auth = tweepy.OAuthHandler("82s3u4xSfcrvRMXHnHI1HfJwI",
-        "mxpjNhBjOi1KnfQMAn15QGDwdGgbcsU6ptUWsrkQSSNCPh0Zi6")
+auth = tweepy.OAuthHandler("",
+        "")
 
-auth.set_access_token("1246318841963204608-vio3R1OMUccO1P90yoWqgK38u7ScnR",
-        "q6GOuIkN9RTDwYv3GfxRzdBUbuYDtLZt9waOWiAfdpqPG")
+auth.set_access_token("",
+        "")
 
 api = tweepy.API(auth)
 
